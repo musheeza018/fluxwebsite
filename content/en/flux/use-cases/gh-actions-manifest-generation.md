@@ -7,387 +7,70 @@ weight: 40
 
 This example implements "build-time" manifest generation on GitHub Actions.
 
-Third-party tools are used to generate YAML manifests in a CI job. The updated YAML are committed and pushed to Git, where `kustomize-controller` finally applies them.
+Third-party and first-party tools can be used to generate YAML manifests in a CI job, from any form of template or configuration language. The resulting YAML manifests are pushed to an OCI repository, which Flux ingests in an `OCIRepository` source where `kustomize-controller` picks them up and applies them to a cluster.
 
 ### Background
 
 There are many use cases for manifest generation tools, but Flux v2 no longer permits embedding arbitrary binaries with the Flux machinery to run at apply time.
 
-Flux (kustomize-controller) will apply whatever revision of the manifests are at the latest commit, on any branch it is pointed at. By design, Flux doesn't care for any details of how a commit is generated.
+Flux (kustomize-controller) will apply whatever revision of the manifests are in the artifact, on whatever branch or label the source synchronizes. By design, Flux's Kustomize applier doesn't concern with any details of an artifact other than what content it has.
 
-Since ["select latest by build time" image automation][flux2/discussions/802] is deprecated, and since [`.flux.yaml` is also deprecated][flux2/issues/543], some staple workflows are no longer possible without new accommodations from infrastructure.
+Since Flux v1, Flux no longer collects image metadata for mostly scalability reasons: ["select latest by build time" image automation][flux2/discussions/802] is deprecated, and since [`.flux.yaml` is also deprecated][flux2/issues/543], some staple workflows for manifest generation must move to CI jobs.
 
 #### What Should We Do?
 
-We first recommend users [adjust their tagging strategies][Sortable image tags], which is made clear elsewhere in the docs. This is usually a straightforward adjustment, and enables the use of [Image Update Policies][image update guide]; however this may not be feasible or desired in some cases.
+We first recommend, to enable automation, for users who do not already use sortable image tags to [adjust tagging strategies][Sortable image tags] to conform with either a sortable or semantic tagging approach, which is made clearer elsewhere in the docs. This is usually a straightforward adjustment, and enables the use of [Image Update Policies][image update guide]; however this is an opinionated feature that may not be feasible or desired in some cases.
+
+Some users may insist on using an 8 character GIT SHA as a tag, or have legacy requirements that cannot be altered easily, especially when migrating from Flux v1.
 
 ## Use Manifest Generation
 
-Introducing, Manifest Generation with Jsonnet, for [any old app] on GitHub!
+Introducing, the Manifest Generation with Jsonnet example, for "[any old app]" on GitHub!
 
 If you have followed the [Flux bootstrap guide] and only have one `fleet-infra` repository, it is recommended to create a separate repository that represents your application for this use case guide, or clone the repository linked above in order to review these code examples which have already been implemented there.
 
-### Primary Uses of Flux
-
-Flux's primary use case for `kustomize-controller` is to apply YAML manifests from the latest `Revision` of an `Artifact`.
-
-### Security Consideration
-
-Flux v2 can not be configured to call out to arbitrary binaries that a user might supply with an `InitContainer`, as it was possible to do in Flux v1.
+	@@ -37,29 +39,29 @@ Flux v2 can not be configured to call out to arbitrary binaries that a user migh
 
 #### Motivation for this Guide
 
-In Flux v2 it is assumed if users want to run more than `Kustomize` with `envsubst`, that it will be done outside of Flux; the goal of this guide is to show several common use cases of this pattern in secure ways.
+In Flux v2 it is assumed if users want to run more than `Kustomize` with `envsubst`, or other types of manifest generation that can be done natively through Kustomize, that it will be done outside of Flux's Kustomize controller; the goal of this guide is to show several common use cases of this pattern in secure ways.
 
 #### Demonstrated Concepts
 
-It is intended, finally, to show through this use case, three fundamental ideas for use in CI to accompany Flux automation:
+It is intended, finally, to show through this use case, a straightforward approach to use Flux to release manifests from CI.
 
-1. Writing workflow that can commit changes back to the same branch of a working repository.
-1. A workflow to commit generated content from one directory into a different branch in the repository.
-1. Workflow to commit from any source directory into a target branch on a different repository.
+This is demonstrated in a way that writes forward to an OCI repository instead of writing back to Git as in previous versions, mainly for security posturing reasons but also for simplicity.
 
-Readers can interpret this document with adaptations for use with other CI providers, or Git source hosts, or manifest generators.
+This workflow builds and pushes (or simply pushes) YAML manifests to a versioned storage, the OCIRepository, which Flux's Kustomize controller can consume. This means that any manifests which your CI can generate can be versioned and stored, tested once published, and promoted for release.
 
-Jsonnet is demonstrated with examples presented in sufficient depth that, hopefully, Flux users who are not already familiar with manifest generation or Jsonnet can pick up `kubecfg` and start using it to solve novel and interesting configuration problems.
+Users can interpret this document with adaptations for use with other CI providers, or Git source hosts, or image registries, or manifest generators.
+
+The first example should be good enough to support any plain YAML manifests which are not edited by CI. This should be good enough for most use cases.
+
+Jsonnet is also demonstrated in the subsequent examples presented in sufficient depth that, hopefully, Flux users who are not already familiar with manifest generation or Jsonnet can pick up `kubecfg` and start using it to solve novel and interesting configuration problems after reading this guide.
 
 ### The Choice of GitHub Actions
 
-There are authentication concerns to address with every CI provider and they also differ by Git provider.
+When this guide was first created, it did not include OCI Repositories and instead used Git branches as a target for CI output of the generated manifests. GitHub Actions was chosen deliberately as there are authentication concerns to address with every CI provider and they also differ by Git provider, but GHA solves this collaboration problem well.
 
-Given that GitHub Actions are hosted on GitHub, this guide can be streamlined in some ways. We can almost completely skip configuring authentication. The cross-cutting concern is handled by the CI platform, except in our fourth and final example, the *Commit Across Repositories Workflow*.
+With the introduction of `OCIRepository` sources, many things can be simplified now. There is no more need for a *Commit Across Repositories Workflow*, or any complicated trust graph. Each Git repository with manifests can provide an app image (or rootfs media type image layers) and Kubernetes manifests bundled as a separate OCI Artifact, or even bundled together in the same OCI Image.
 
-From a GitHub Action, as we must have been authenticated to write to a branch, Workflows also can transitively gain write access to the repo safely.
-
-Mixing and matching from other providers like Bitbucket Cloud, Jenkins, or GitLab will need more attention to these details for auth configurations. GitHub Actions is a platform that is designed to be secure by default.
+It is no longer necessary for these workflows to write back to Git. There were many other great reasons to choose GitHub Actions, so this guide today still uses it.
 
 ## Manifest Generation Examples
 
-There are several use cases presented.
-
-* [String Substitution with sed -i]
-* [Docker Build and Tag with Version]
-* [Jsonnet for YAML Document Rehydration]
-* [Commit Across Repositories Workflow]
-
-In case these examples are too heavy, this short link guide can help you navigate the four main examples. Finally, the code examples we've all been waiting for, the answer to complex `.flux.yaml` configs in Flux v2! 🎉🎁
-
-### String Substitution with `sed -i`
-
-The entry point for these examples begins at `.github/workflows/` in any GitHub source repository where your YAML manifests are stored.
-
-{{% alert color="warning" title="GitRepository source only targets one branch" %}}
-While this first example operates on any branch (`branches: ['*']`), each `Kustomization` in Flux only deploys manifests from **one branch or tag** at a time. Understanding this is key for managing large Flux deployments and clusters with multiple `Kustomizations` and/or crossing several environments.
-{{% /alert %}}
-
-First add this directory if needed in your repositories. Find the example below in context, and read on to understand how it works: [01-manifest-generate.yaml].
-
-```yaml
-# ./.github/workflows/01-manifest-generate.yaml
-name: Manifest Generation
-on:
-  push:
-    branches:
-    - '*'
-
-jobs:
-  run:
-    name: Push Git Update
-    runs-on: ubuntu-latest
-    steps:
-      - name: Prepare
-        id: prep
-        run: |
-          VERSION=${GITHUB_SHA::8}
-          echo BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ') >> $GITHUB_OUTPUT
-          echo VERSION=${VERSION} >> $GITHUB_OUTPUT
-
-      - name: Checkout repo
-        uses: actions/checkout@v3
-
-      - name: Update manifests
-        run: ./update-k8s.sh $GITHUB_SHA
-
-      - name: Commit changes
-        uses: EndBug/add-and-commit@v7
-        with:
-          add: '.'
-          message: "[ci skip] deploy from ${{ steps.prep.outputs.VERSION }}"
-          signoff: true
-```
-
-In the `Prepare` step, even before the clone, GitHub Actions provides metadata about the commit. Then, `Checkout repo` performs a shallow clone for the build.
-
-```bash
-# excerpt from above - set two outputs named "VERSION" and "BUILD_DATE"
-VERSION=${GITHUB_SHA::8}
-echo BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ') >> $GITHUB_OUTPUT
-echo VERSION=${VERSION} >> $GITHUB_OUTPUT
-```
-
-{{% alert title="When migrating to Flux v2" %}}
-Users will find that [some guidance has changed since Flux v1](https://github.com/fluxcd/flux2/discussions/802#discussioncomment-320189). Tagging images with a `GIT_SHA` was a common practice that is no longer supported by Flux's Image Automation. A newer alternative is adding timestamp or build number in [Sortable image tags]({{< relref "../guides/sortable-image-tags/" >}}), preferred by the `image-automation-controller`.
-{{% /alert %}}
-
-Next we call out to a shell script `update-k8s.sh` taking one argument, the Git SHA value from GitHub:
-
-```yaml
-# excerpted from above - run a shell script
-- name: Update manifests
-  run: ./update-k8s.sh $GITHUB_SHA
-```
-
-That script is below. It performs two in-place string substitutions using `sed`.
-
-```bash
-#!/bin/bash
-
-# update-k8s.sh
-set -feu	# Usage: $0 <GIT_SHA>	# Fails when GIT_SHA is not provided
-
-GIT_SHA=${1:0:8}
-sed -i "s|image: kingdonb/any-old-app:.*|image: kingdonb/any-old-app:$GIT_SHA|" k8s.yml
-sed -i "s|GIT_SHA: .*|GIT_SHA: $GIT_SHA|" flux-config/configmap.yaml
-```
-
-`update-k8s.sh` receives `GITHUB_SHA` that the script trims down to 8 characters.
-
-Then, `sed -i` runs twice, updating `k8s.yml` and `flux-config/configmap.yaml` which are also provided as examples here. The new SHA value is added twice, once in each file.
-
-```yaml
-# k8s.yml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: any-old-app
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: any-old-app
-  template:
-    metadata:
-      labels:
-        app: any-old-app
-    spec:
-      containers:
-      - image: kingdonb/any-old-app:4f314627
-        name: any-old-app
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: any-old-app
-spec:
-  type: ClusterIP
-  ports:
-  - name: "any-old-app"
-    port: 3000
-  selector:
-    app: any-old-app
-```
-
-The convention of including a `k8s.yml` file in one's application repository is borrowed from [Okteto's Getting Started Guides], as a simplified example.
-
-The `k8s.yml` file in the application root is not meant to be applied by Flux, but might be a handy template to keep fresh as a developer reference nonetheless.
-
-The file below, `configmap.yaml`, is placed in a directory `flux-config/` which will be synchronized to the cluster by a `Kustomization` that we will add in the following step.
-
-```yaml
-# flux-config/configmap.yaml
-apiVersion: v1
-data:
-  GIT_SHA: 4f314627
-kind: ConfigMap
-metadata:
-  creationTimestamp: null
-  name: any-old-app-version
-  namespace: devl
-```
-
-These are the two files that are re-written in the `sed -i` example above.
-
-A configmap is an ideal place to write a variable that is needed by any downstream `Kustomization`, for example to use with `envsubst`.
-
-```yaml
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: any-old-app-devl
-spec:
-  interval: 15m0s
-  path: ./
-  prune: true
-  sourceRef:
-    kind: GitRepository
-    name: any-old-app-prod
-  targetNamespace: prod
-  postBuild:
-    substituteFrom:
-      - kind: ConfigMap
-        name: any-old-app-version
----
-apiVersion: source.toolkit.fluxcd.io/v1
-kind: GitRepository
-metadata:
-  name: any-old-app-prod
-  namespace: prod
-spec:
-  interval: 20m0s
-  ref:
-    branch: deploy
-  secretRef:
-    name: flux-secret
-  url: ssh://git@github.com/kingdonb/csh-flux
-```
-
-Now, any downstream `Deployment` in the `Kustomization` can write a `PodSpec` like this one, to reference the image from the latest commit referenced by the `ConfigMap`:
-
-```yaml
-# flux/ some-example-deployment.yaml
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: any-old-app
-  template:
-    metadata:
-      labels:
-        app: any-old-app
-    spec:
-      containers:
-      - image: kingdonb/any-old-app:${GIT_SHA}
-        name: any-old-app
-```
-
-Deployment specifications will vary, so adapting this example is left as exercise for the reader. Write it together with a kustomization.yaml, or just add this to a subdirectory anywhere within your Flux Kustomization path.
-
-### Docker Build and Tag with Version
-
-Now for another staple workflow: building and pushing an OCI image tag from a Dockerfile in any branch or tag.
-
-From the Actions marketplace, [Build and push Docker images] provides the heavy lifting in this example. Flux has nothing to do with building images, but we include this still — as some images will need to be built for our use in these examples.
-
-{{% alert title="ImageRepository can reflect both branches and tags" %}}
-This example builds an image for any branch or tag ref and pushes it to Docker Hub. (Note the omission of `branches: ['*']` that was in the prior example.) GitHub Secrets `DOCKERHUB_USERNAME` and `DOCKERHUB_TOKEN` are used here to authenticate with Docker Hub from within GitHub Actions.
-{{% /alert %}}
-
-We again borrow a [Prepare step] from Kustomize Controller's own release workflow. Find the example below in context, [02-docker-build.yaml], or copy it from below.
-
-```yaml
-# ./.github/workflows/02-docker-build.yaml
-name: Docker Build, Push
-
-on:
-  push:
-    branches:
-      - '*'
-    tags-ignore:
-      - 'release/*'
-
-jobs:
-  docker:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Prepare
-        id: prep
-        run: |
-          VERSION=${GITHUB_SHA::8}
-          if [[ $GITHUB_REF == refs/tags/* ]]; then
-            VERSION=${GITHUB_REF/refs\/tags\//}
-          fi
-          echo BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ') >> $GITHUB_OUTPUT
-          echo VERSION=${VERSION} >> $GITHUB_OUTPUT
-
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-
-      - name: Login to DockerHub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Build and push
-        id: docker_build
-        uses: docker/build-push-action@v4
-        with:
-          push: true
-          tags: kingdonb/any-old-app:${{ steps.prep.outputs.VERSION }}
-
-      - name: Image digest
-        run: echo ${{ steps.docker_build.outputs.digest }}
-```
-
-The [Docker Login Action] is used here to enable an authenticated image push.
-
-Any secrets from GitHub Secrets can be used as shown, and support for image registries is explained in the linked README. Add a setting for `registry` if your app uses any private registry, rather than the implicit Docker Hub registry above.
-
-```
-# for example
-with:
-  registry: registry.cloud.okteto.net
-```
-
-The image tag `VERSION` comes from the branch or Git tag that triggered the build. Whether that version is a `GIT_SHA` or a Semantic Version, (or anything in between!) the same workflow can be used to build an OCI image as shown here.
-
-### Jsonnet for YAML Document Rehydration
-
-As mentioned before, Flux only monitors one branch or tag per Kustomization.
-
-In the earlier examples, no fixed branch target was specified. Whatever branch triggered the workflow, received the generated YAMLs in the next commit.
-
-If you created your deployment manifests in any branch, the `deploy` branch or otherwise, it is necessary to add another `Kustomization` and `GitRepository` source to apply manifests from that branch and path in the cluster.
-
-In application repositories, it is common to maintain an environment branch, a release branch, or both. Some additional Flux objects may be needed for each new environment target with its own branch. Jsonnet can be used for more easily managing heavyweight repetitive boilerplate configuration such as this.
-
-It is recommended to follow these examples as they are written for better understanding, then later change and adapt them for your own release practices and environments.
-
-{{% alert title="GitRepository source only targets one branch" %}}
-Since Flux uses one branch per Kustomization, to trigger an update we must write to a `deploy` branch or tag. Even when new app images can come from any branch (eg. for Dev environments where any latest commit is to be deployed) the YAML manifests to deploy will be sourced from just one branch.
-{{% /alert %}}
-
-It is advisable to protect repository main and release branches with eg. branch policies and review requirements, as through automation, these branches can directly represent the production environment.
-
-The CI user for this example should be allowed to push directly to the `deploy` branch that Kustomize deploys from; this branch also represents the environment so must be protected in a similar fashion to `release`.
-
-Only authorized people (and build robots) should be allowed to make writes to a `deploy` branch.
-
-#### Jsonnet Render Action
-
-In this example, the outputted YAML manifests, (on successful completion of the Jsonnet render step,) are staged on the `deploy` branch, then committed and pushed.
-
-The latest commit on the `deploy` branch is reconciled into the cluster by another `Kustomization` that is omitted here, as it is assumed that users who have read this far already added this in the previous examples.
-
-You may find the example below in context, [03-release-manifests.yaml], or simply copy it from below.
-
-```yaml
-# ./.github/workflows/03-release-manifests.yaml
-name: Build jsonnet
-on:
-  push:
+	@@ -373,6 +375,9 @@ on:
     tags: ['release/*']
     branches: ['release']
+
+env:
+  OCI_REPO: "oci://ghcr.io/my-org/manifests/${{ github.event.repository.name }}"
 
 jobs:
   run:
     name: jsonnet push
-    runs-on: ubuntu-latest
-    steps:
-      - name: Prepare
-        id: prep
-        run: |
-          VERSION=${GITHUB_SHA::8}
-          if [[ $GITHUB_REF == refs/tags/release/* ]]; then
-            VERSION=${GITHUB_REF/refs\/tags\/release\//}
-          fi
-          echo BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ') >> $GITHUB_OUTPUT
-          echo VERSION=${VERSION} >> $GITHUB_OUTPUT
-
+	@@ -389,40 +394,57 @@ jobs:
+          echo ::set-output name=VERSION::${VERSION}
       - name: Checkout repo
         uses: actions/checkout@v3
 
@@ -397,31 +80,46 @@ jobs:
       - name: kubecfg show
         run: kubecfg show manifests/example.jsonnet > output/production.yaml
 
-      - name: Prepare target branch
-        run: ./ci/rake.sh deploy
+      - name: Setup Flux CLI
+        uses: fluxcd/flux2/action@main
 
-      - name: Commit changes
-        uses: EndBug/add-and-commit@v7
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
         with:
-          add: 'production.yaml'
-          branch: deploy
-          message: "[ci skip] from ${{ steps.prep.outputs.VERSION }}"
-          signoff: true
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Push manifests
+        run: |
+          flux push artifact $OCI_REPO:$(git rev-parse --short HEAD) \
+            --path="./deploy" \
+            --source="$(git config --get remote.origin.url)" \
+            --revision="$(git branch --show-current)/$(git rev-parse HEAD)"
+      - name: Deploy manifests to production
+        run: |
+          flux tag artifact $OCI_REPO:$(git rev-parse --short HEAD) --tag production
 ```
 
-We add three new steps in this example:
+We add four interesting new steps (and some other supporting steps) in this example:
 
 ```yaml
-# excerpted from above - workflow steps 3, 4, and 5
+# excerpted from above - workflow steps 3, 4, 7, and 8
 - name: Setup kubecfg CLI
   uses: kingdonb/kubecfg/action@main
 
 - name: kubecfg show
   run: kubecfg show manifests/example.jsonnet > output/production.yaml
 
-- name: Prepare target branch
-  run: ./ci/rake.sh deploy
+- name: Push manifests
+  run: |
+    flux push artifact $OCI_REPO:[...]
+      ...
+- name: Deploy manifests to production
+    run: |
+      flux tag artifact $OCI_REPO:[...] --tag production
 ```
+
+This pushes an artifact creating two tags for the same artifact, a versioned tag and a mutable one. You can use a Flux `OCIRepository` source and deploy from it as described in the [OCI Flux Getting Started Guide](https://FIXME)
 
 While the remaining examples will be written to depend on `kubecfg`, some use cases may prefer to use pure Jsonnet only as it is sandboxed and therefore safer. We plan to use the `kubecfg` capability to take input from other sources, like variables and references, but also network-driven imports and functions.
 
