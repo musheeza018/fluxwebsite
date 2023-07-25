@@ -40,7 +40,9 @@
 
 /flux/use-cases/aws-codecommit/*                                      /flux/installation/bootstrap/aws-codecommit                     301!
 
-/flux/use-cases/azure/*        /flux/404   400
+/flux/installation/#bootstrap  /flux/404   400
+
+/flux/use-cases/azure/*        /flux/installation/bootstrap/azure  301
 
 /flux/use-cases/gcp-source-repository                                 /flux/installation/bootstrap/gcp-source-repository              301! 
 
