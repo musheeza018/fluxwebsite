@@ -23,8 +23,6 @@
   Content-Security-Policy = "frame-ancestors 'self'"
 
 [[redirects]]
-  from = "/flux/cheatsheets/bootstrap/#iam-roles-for-service-accounts"
-  to = "/flux/installation/configuration/iam-roles-for-service-accountsm"
-  status = 200
-  force = true
-  headers = {X-From = "Netlify"}
+	from = "/*"
+	to = "/404/"
+	status = 404
