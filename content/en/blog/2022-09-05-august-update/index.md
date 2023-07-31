@@ -256,7 +256,7 @@ couple of small things we landed recently:
   - Bootstrap: [Git repository access via SOCKS5 ssh
     proxy](/flux/installation/configuration/git-ssh-proxy)
   - Bootstrap: [Enable notifications for third party
-    controllers](/flux/installation/configuration/enable-notifications-for-third-party-controllers)
+    controllers](/flux/installation/configuration/notifications-third-party-controllers)
 - [Flux's Work Well With section](/docs/#flux-works-well-with): find out
   how to make Flux work with your favourite other OSS software
 - Lots of new videos from GitOpsCon / KubeCon on [our resources
