@@ -21,7 +21,9 @@ ALL_PROXY=socks5://<proxy-address>:<port>
 
 The following is an example of patching the Flux setup kustomization to add the
 `ALL_PROXY` environment variable in source-controller and
-image-automation-controller:
+image-automation-controller.
+
+To enable Git repository access via SOCKS5 SSH proxy [during bootstrap](_index.md) add the following patches to the flux-system `kustomization.yaml`:
 
 ```yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
