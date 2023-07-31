@@ -17,6 +17,8 @@ implications](https://github.com/helm/helm/security/advisories/GHSA-pwcw-6f5g-gx
 To enable DNS lookups, you must add the `--feature-gates=AllowDNSLookups=true`
 flag to the helm-controller Deployment.
 
+To enable Helm DNS lookup [during bootstrap](_index.md) add the following patches to the flux-system `kustomization.yaml`:
+
 ```yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
