@@ -1,11 +1,11 @@
 ---
-title: Node affinity, tolerations and eviction
-linkTitle: Node affinity, tolerations and eviction
+title: Configure node affinity, tolerations and eviction
+linkTitle: Configure node affinity, tolerations and eviction
 description: "How to configure Node affinity, tolerations and eviction in Flux"
 weight: 70
 ---
 
-### Node affinity and tolerations
+### Node affinity and tolerations configuration in Flux
 
 Pin the Flux controllers to specific nodes:
 
