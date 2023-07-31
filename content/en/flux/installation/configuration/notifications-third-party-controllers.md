@@ -7,6 +7,8 @@ weight: 180
 
 ### Enable notifications for third party Flux controllers
 
+To enable notifications for third party controllers [during bootstrap](_index.md) add the following patches to the flux-system `kustomization.yaml`:
+
 Enable notifications for 3rd party Flux controllers such as [tf-controller](https://github.com/weaveworks/tf-controller):
 
 ```yaml
