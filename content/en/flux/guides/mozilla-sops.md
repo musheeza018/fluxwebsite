@@ -311,7 +311,7 @@ kubectl -n flux-system rollout restart deployment/kustomize-controller
 ```
 
 {{% alert color="info" title="Bootstrap" %}}
-Note that when using `flux bootstrap` you can [set the annotation](../cheatsheets/bootstrap.md#iam-roles-for-service-accounts) to take effect at install time.
+Note that when using `flux bootstrap` you can [set the annotation](/flux/installation/configuration/iam-roles) to take effect at install time.
 {{% /alert %}}
 
 #### Azure
@@ -498,7 +498,7 @@ iam.gke.io/gcp-service-account=<SERVICE_ACCOUNT_ID>@<PROJECT_ID>.iam.gserviceacc
 ```
 
 {{% alert color="info" title="Bootstrap" %}}
-Note that when using `flux bootstrap` you can [set the annotation](../cheatsheets/bootstrap.md#iam-roles-for-service-accounts) to take effect at install time.
+Note that when using `flux bootstrap` you can [set the annotation](/flux/installation/configuration/iam-roles) to take effect at install time.
 {{% /alert %}}
 
 ## GitOps workflow
