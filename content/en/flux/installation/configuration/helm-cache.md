@@ -8,7 +8,7 @@ weight: 90
 ### Enable Helm repositories caching
 
 For large Helm repository index files, you can enable
-caching to reduce the memory footprint of source-controller:
+caching to reduce the memory footprint of source-controller. To enable Helm repositories caching [during bootstrap](_index.md) add the following patches to the flux-system `kustomization.yaml`:
 
 ```yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
