@@ -1,6 +1,6 @@
 ---
-title: SSH Deploy Key Rotation
-linkTitle: SSH Deploy Key Rotation
+title: Configure SSH Deploy Key Rotation
+linkTitle: Configure SSH Deploy Key Rotation
 description: "How to configure SSH Deploy Key Rotation in Flux"
 weight: 30
 ---
