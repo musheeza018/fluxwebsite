@@ -1,10 +1,9 @@
 ---
-title: Git repository access via SOCKS5 SSH proxy
-linkTitle: Git repository access via SOCKS5 SSH proxy
+title: Configure Git repository access via SOCKS5 SSH proxy
+linkTitle: Configure Git repository access via SOCKS5 SSH proxy
 description: "How to configure Git repository access via SOCKS5 SSH proxy in Flux"
 weight: 140
 ---
-
 
 ### Git repository access via SOCKS5 SSH proxy
 
