@@ -16,6 +16,8 @@ There are several reasons you may want to rotate the deploy key:
 While you can run `flux bootstrap` repeatedly, be aware that the `flux-system` Kubernetes Secret is never overwritten.
 You need to manually rotate the key as described here.
 
+To enable SSH deploy key rotation [during bootstrap](_index.md) add the following patches to the flux-system `kustomization.yaml`:
+
 To rotate the SSH key generated at bootstrap, first delete the secret from the cluster with:
 
 ```sh
