@@ -1,9 +1,11 @@
 ---
-title: IAM Roles for Service Accounts
-linkTitle: IAM Roles for Service Accounts
+title: Configure IAM Roles for Service Accounts
+linkTitle: Configure IAM Roles for Service Accounts
 description: "How to configure IAM Roles for Service Accounts"
 weight: 160
 ---
+
+IAM roles play an essential part  in controlling access to cloud resources for Flux and other Kubernetes components.
 
 ### IAM Roles for Service Accounts
 
