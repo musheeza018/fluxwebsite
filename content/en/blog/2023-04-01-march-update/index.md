@@ -55,7 +55,7 @@ articles and how-tos:
 - Cheatsheet: [Enable Helm near OOM
   detection](/flux/cheatsheets/bootstrap/#enable-helm-near-oom-detection)
 - Cheatsheet: [Allow Helm DNS
-  lookups](/flux/cheatsheets/bootstrap/#allow-helm-dns-lookups)
+  lookups](/flux/installation/configuration/helm-dns)
 - Controller: [New helm-controller feature gates and
   options](/flux/components/helm/options/#feature-gates)
 - Controller: [New kustomize-controller feature
@@ -367,7 +367,7 @@ couple of small things we landed recently:
 - We added information about to [enable Helm drift
   detection](/flux/cheatsheets/bootstrap/#enable-helm-drift-detection)
   and how to [allow Helm DNS
-  lookups](/flux/cheatsheets/bootstrap/#allow-helm-dns-lookups).
+  lookups](/flux/installation/configuration/helm-dns).
 
 And on top of that countless fixes, small improvements and updates as
 always. Thanks a lot to these folks who contributed to docs and website:
