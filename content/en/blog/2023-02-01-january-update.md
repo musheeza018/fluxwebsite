@@ -360,7 +360,7 @@ couple of small things we landed recently:
   come here.
 - Flagger docs were update to the latest.
 - Flux Bootstrap: cheatsheet for how to [Persistent storage for Flux
-  internal artifacts](/flux/cheatsheets/bootstrap/#persistent-storage-for-flux-internal-artifacts)
+  internal artifacts](/flux/installation/configuration/internal-artifacts)
 - [Our FAQ](/flux/faq/) now has entries about how to safely rename a
   Flux Kustomization and how to set local overrides to a Helm chart.
   As it's one of the very common FAQs: We also mention the different
