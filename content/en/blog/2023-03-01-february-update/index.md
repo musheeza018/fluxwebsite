@@ -350,7 +350,7 @@ We are constantly improving our documentation and website - here are a
 couple of small things we landed recently:
 
 - Bootstrapping: here's how to [disable Kubernetes cluster role
-  aggregations](/flux/cheatsheets/bootstrap/#disable-kubernetes-cluster-role-aggregations)
+  aggregations](/flux/installation/configuration/cluster-aggregations)
 - Update [image-updates guide](/flux/guides/image-update/) to reflect the new
   API version and recent use of flags, extend examples.
 
