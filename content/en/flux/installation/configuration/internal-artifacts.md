@@ -1,17 +1,17 @@
 ---
-title: Persistent storage for internal artifacts
-linkTitle: Persistent storage for internal artifacts
+title: Configure storage for internal artifacts
+linkTitle: Configure storage for internal artifacts
 description: "How to configure persistent storage for internal artifacts in Flux"
 weight: 80
 ---
-
-### Persistent storage for Flux internal artifacts
 
 Flux maintains a local cache of artifacts acquired from external sources.
 By default, the cache is stored in an `EmptyDir` volume, which means that after a restart,
 Flux has to restore the local cache by fetching the content of all Git
 repositories, Buckets, Helm charts and OCI artifacts. To avoid losing the cached artifacts,
 you can configure source-controller with a persistent volume.
+
+### Flux internal artifacts
 
 Create a Kubernetes PVC definition named `gotk-pvc.yaml` and place it in your `flux-system` directory:
 
