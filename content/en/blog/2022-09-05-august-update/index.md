@@ -254,7 +254,7 @@ couple of small things we landed recently:
   - [OCI
     Artifacts](/docs/cheatsheets/oci-artifacts/)
   - Bootstrap: [Git repository access via SOCKS5 ssh
-    proxy](/docs/cheatsheets/bootstrap/#git-repository-access-via-socks5-ssh-proxy)
+    proxy](/flux/installation/configuration/git-ssh-proxy)
   - Bootstrap: [Enable notifications for third party
     controllers](/flux/installation/configuration/enable-notifications-for-third-party-controllers)
 - [Flux's Work Well With section](/docs/#flux-works-well-with): find out
