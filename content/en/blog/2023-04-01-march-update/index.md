@@ -51,7 +51,7 @@ It's important to us to document all the new features, so here goes a list of ne
 articles and how-tos:
 
 - Cheatsheet: [Enable Helm drift
-  detection](/flux/cheatsheets/bootstrap/#enable-helm-drift-detection)
+  detection](/flux/installation/configuration/helm-drift-detection)
 - Cheatsheet: [Enable Helm near OOM
   detection](/flux/cheatsheets/bootstrap/#enable-helm-near-oom-detection)
 - Cheatsheet: [Allow Helm DNS
