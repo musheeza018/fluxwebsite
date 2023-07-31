@@ -1,7 +1,7 @@
 ---
-title: Controller sharding and horizontal scaling
-linkTitle: Controller sharding and horizontal scaling
-description: "How to configure controller sharding and horizontal scaling in Flux"
+title: "Flux sharding and horizontal scaling"
+linkTitle: "Horizontal scaling"
+description: "How to configure sharding for Flux controllers"
 weight: 50
 ---
 
@@ -15,7 +15,7 @@ shard the reconciliation of Flux resources using the `sharding.fluxcd.io/key` la
 
 ## Bootstrap with sharding
 
-At [bootstrap time](/flux/cheatsheets/bootstrap), you can define the number of shards
+At [bootstrap time](_index.md), you can define the number of shards
 and spin up a Flux controller instance for each shard.
 
 First you'll need to create a Git repository and clone it locally, then
