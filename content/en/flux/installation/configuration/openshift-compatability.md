@@ -1,11 +1,11 @@
 ---
-title: OpenShift compatibility
-linkTitle: OpenShift compatibility
+title: Configure OpenShift compatibility
+linkTitle: Configure OpenShift compatibility
 description: "How to configure OpenShift compatibility in Flux"
 weight: 150
 ---
 
-### OpenShift compatibility
+### Run Flux controllers
 
 Allow Flux controllers to run as non-root:
 
