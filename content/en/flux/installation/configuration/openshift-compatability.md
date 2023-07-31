@@ -7,6 +7,8 @@ weight: 150
 
 ### Run Flux controllers
 
+To enable OpenShift compatibility [during bootstrap](_index.md) add the following patches to the flux-system `kustomization.yaml`:
+
 Allow Flux controllers to run as non-root:
 
 ```shell
