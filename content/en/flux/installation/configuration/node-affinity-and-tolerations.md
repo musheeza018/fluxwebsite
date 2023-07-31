@@ -7,6 +7,8 @@ weight: 70
 
 ### Node affinity and tolerations configuration in Flux
 
+To enable node affinity, tolerations, and eviction [during bootstrap](_index.md) add the following patches to the flux-system `kustomization.yaml`:
+
 Pin the Flux controllers to specific nodes:
 
 ```yaml
