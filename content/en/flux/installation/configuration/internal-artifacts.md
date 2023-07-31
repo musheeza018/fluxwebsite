@@ -11,6 +11,8 @@ Flux has to restore the local cache by fetching the content of all Git
 repositories, Buckets, Helm charts and OCI artifacts. To avoid losing the cached artifacts,
 you can configure source-controller with a persistent volume.
 
+To enable Flux internal artifacts [during bootstrap](_index.md) add the following patches to the flux-system `kustomization.yaml`:
+
 ### Flux internal artifacts
 
 Create a Kubernetes PVC definition named `gotk-pvc.yaml` and place it in your `flux-system` directory:
