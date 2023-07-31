@@ -8,7 +8,7 @@ weight: 30
 ## Deploy key rotation
 
 There are several reasons you may want to rotate the deploy key:
-
+   
 - The token used to generate the key has expired.
 - The key has been compromised.
 - You want to change the scope of the key, e.g. to allow write access using the `--read-write-key` flag to `flux bootstrap`.
