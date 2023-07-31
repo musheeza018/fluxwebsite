@@ -12,7 +12,7 @@ By default, Flux [RBAC](/flux/security/#controller-permissions) grants Kubernete
 access to Flux custom resources. To disable the RBAC aggregation, you can remove the `flux-view` and `flux-edit`
 cluster roles.
 
-To disable <role aggregation feature> [during bootstrap](_index.md) add the following patches to the flux-system `kustomization.yaml`:
+To disable role aggregation [during bootstrap](_index.md) add the following patches to the flux-system `kustomization.yaml`:
 
 ```yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
