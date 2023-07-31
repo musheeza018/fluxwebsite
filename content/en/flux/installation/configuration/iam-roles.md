@@ -10,7 +10,9 @@ IAM roles play an essential part  in controlling access to cloud resources for F
 ### IAM Roles for Service Accounts
 
 To allow Flux access to an AWS service such as KMS or S3, after setting up IRSA,
-you can annotate the controller service account with the role ARN:
+you can annotate the controller service account with the role ARN.
+
+To enable IAM roles [during bootstrap](_index.md) add the following patches to the flux-system `kustomization.yaml`:
 
 ```yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
