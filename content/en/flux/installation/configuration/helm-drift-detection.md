@@ -1,6 +1,6 @@
 ---
-title: Enable Helm drift detection
-linkTitle: Enable Helm drift detection
+title: Configure Helm drift detection
+linkTitle: Configure Helm drift detection
 description: "How to configure Helm drift detection in Flux"
 weight: 100
 ---
