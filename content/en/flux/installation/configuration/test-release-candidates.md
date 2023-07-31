@@ -1,11 +1,11 @@
 ---
-title: Test release candidate
-linkTitle: Test release candidate
+title: Configure test release candidate
+linkTitle: Configure test release candidate
 description: "How to configure test release candidate in Flux"
 weight: 190
 ---
 
-### Test release candidates
+### Test release candidates configuration in Flux
 
 To test release candidates, you can patch the container image tags:
 
