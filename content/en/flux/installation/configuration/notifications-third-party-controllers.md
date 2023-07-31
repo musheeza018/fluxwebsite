@@ -5,7 +5,7 @@ description: "How to enable notifications for third party controllers in Flux"
 weight: 180
 ---
 
-### Enable notifications for third party controllers
+### Enable notifications for third party Flux controllers
 
 Enable notifications for 3rd party Flux controllers such as [tf-controller](https://github.com/weaveworks/tf-controller):
 
