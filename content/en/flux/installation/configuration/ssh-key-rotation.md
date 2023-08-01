@@ -24,6 +24,8 @@ To rotate the SSH key generated at bootstrap, first delete the secret from the c
 kubectl -n flux-system delete secret flux-system
 ```
 
+### Generate a new SSH key
+
 Then you have two alternatives to generate a new key:
 
 1. Generate a new secret with
