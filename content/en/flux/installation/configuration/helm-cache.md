@@ -5,7 +5,11 @@ description: "How to enable Helm repositories caching in Flux"
 weight: 90
 ---
 
-### Enable Helm repositories caching
+The Helm cache repository acts as an intermediary storage for Helm
+charts. By serving as a local cache, it allows Flux to retrieve 
+Helm charts more efficiently during subsequent deployments
+
+### Enable cache for Source controller
 
 For large Helm repository index files, you can enable
 caching to reduce the memory footprint of source-controller. 
