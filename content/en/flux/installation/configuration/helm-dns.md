@@ -8,6 +8,8 @@ card:
   weight: 10
 ---
 
+Flux and Helm are essential in managing Kubernetes resources and deploying applications, while Kubernetes itself handles the DNS lookup process. Helm's primary responsibility in this context is to define and deploy various resources within the cluster.
+
 ### Allow Helm DNS lookups
 
 By default, the helm-controller will not perform DNS lookups when rendering Helm
