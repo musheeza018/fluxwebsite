@@ -5,9 +5,9 @@ description: "How to configure IAM Roles for Service Accounts"
 weight: 160
 ---
 
-IAM roles play an essential part  in controlling access to cloud resources for Flux and other Kubernetes components.
+IAM roles play an essential part in controlling access to cloud resources for Flux and other Kubernetes components.
 
-### IAM Roles for Service Accounts
+### IAM Roles for setup controller service
 
 To allow Flux access to an AWS service such as KMS or S3, after setting up IRSA,
 you can annotate the controller service account with the role ARN.
