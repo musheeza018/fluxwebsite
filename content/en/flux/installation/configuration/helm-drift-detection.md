@@ -5,7 +5,11 @@ description: "How to configure Helm drift detection in Flux"
 weight: 100
 ---
 
-### Enable Helm drift detection
+Helm drift detection identifies and alerts about any inconsistencies 
+or differences between the desired state of your Helm releases in your 
+Git repository and the actual state of deployed releases in the Kubernetes cluster.
+
+### Add feature flag to Helm controller
 
 At present, Helm releases are not by default checked for drift compared to
 cluster-state. To enable experimental drift detection, you must add the
