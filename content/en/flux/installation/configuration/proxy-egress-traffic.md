@@ -4,8 +4,12 @@ linkTitle: Configure HTTP/S proxy for egress traffic
 description: "How to configure HTTP/S proxy for egress traffic in Flux"
 weight: 130
 ---
+HTTP/S proxy for egress traffic in Flux is to act as an intermediary between the 
+Flux components running in a Kubernetes cluster and external resources, such as 
+container registries, Git repositories, or any other services accessed during 
+the deployment and synchronization process.
 
-### Using HTTP/S proxy for egress traffic
+### Set HTTP/S proxy for cluster controller
 
 If your cluster must use an HTTP proxy to reach GitHub or other external services,
 you must set `NO_PROXY=.cluster.local.,.cluster.local,.svc`
