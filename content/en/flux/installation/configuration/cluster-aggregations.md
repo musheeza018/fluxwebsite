@@ -5,13 +5,17 @@ description: "How to disable Kubernetes cluster role aggregations in Flux"
 weight: 170
 ---
 
+Cluster role aggregations are mechanisms in Kubernetes that allow multiple 
+cluster roles to be combined into a single cluster role, simplifying the management of RBAC
 
 ### Disable Kubernetes cluster role aggregations
 
 By default, Flux [RBAC](/flux/security/#controller-permissions) grants Kubernetes builtin `view`, `edit` and `admin` roles
 access to Flux custom resources. To disable the RBAC aggregation, you can remove the `flux-view` and `flux-edit`
 cluster roles.
- 
+
+### Edit the cluster roles
+
 To disable role aggregation [during bootstrap](_index.md) add the following patches to the flux-system `kustomization.yaml`:
 
 ```yaml
