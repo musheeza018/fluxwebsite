@@ -8,7 +8,7 @@ card:
   weight: 10
 ---
 
-### Enable Helm near OOM detection
+### OOM detection for Helm controller
 
 When memory usage of the helm-controller exceeds the configured limit, the
 controller will forcefully be killed by Kubernetes' OOM killer. This may result
