@@ -2,7 +2,7 @@
 title: "Flux sharding and horizontal scaling"
 linkTitle: "Horizontal scaling"
 description: "How to configure sharding for Flux controllers"
-weight: 50
+weight: 11
 ---
 
 When Flux is managing tens of thousands of applications, it is advised to adopt
@@ -15,7 +15,7 @@ shard the reconciliation of Flux resources using the `sharding.fluxcd.io/key` la
 
 ## Bootstrap with sharding
 
-At [bootstrap time](_index.md), you can define the number of shards
+At [bootstrap time](boostrap-customization.md), you can define the number of shards
 and spin up a Flux controller instance for each shard.
 
 First you'll need to create a Git repository and clone it locally, then
@@ -146,15 +146,15 @@ patches:
   - target:
       kind: Deployment
       name: "(source-controller|kustomize-controller|helm-controller)"
-      annotationSelector: "sharding.fluxcd.io/role notin (shard)"
+      annotationSelector: "!sharding.fluxcd.io/role"
     patch: |
       - op: add
         path: /spec/template/spec/containers/0/args/0
-        value: --watch-label-selector=sharding.fluxcd.io/key notin (shard1, shard2)
+        value: --watch-label-selector=!sharding.fluxcd.io/key
 ```
 
 Note how this configuration excludes the sharding keys from the main controllers watch with
-`--watch-label-selector=sharding.fluxcd.io/key notin (shard1, shard2)`. This ensures
+`--watch-label-selector=!sharding.fluxcd.io/key`. This ensures
 that the main controllers will not reconcile any Flux resources labels with the sharding keys.
 
 ### Install and Upgrade shards
