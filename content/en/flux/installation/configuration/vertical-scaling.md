@@ -2,11 +2,11 @@
 title: "Flux vertical scaling"
 linkTitle: "Vertical scaling"
 description: "How to configure vertical scaling for Flux controllers"
-weight: 60
+weight: 10
 ---
 
 When Flux is managing hundreds of applications that are deployed multiple times per day, cluster admins
-can fine tune the Flux controller at [bootstrap time](_index.md) to run at scale by:
+can fine tune the Flux controller at [bootstrap time](boostrap-customization.md) to run at scale by:
 
 - [Increasing the number of workers and resource limits](#increase-the-number-of-workers-and-limits)
 - [Enabling Helm repository caching to reduce memory usage](#enable-helm-repositories-caching)
@@ -91,7 +91,7 @@ read from file. Cache hits are exposed via the `gotk_cache_events_total` Prometh
 metrics. Use this data to fine-tune the configuration flags.
 
 
-### Persistent storage for Flux internal artifacts
+## Persistent storage for Flux internal artifacts
 
 Flux maintains a local cache of artifacts acquired from external sources.
 By default, the cache is stored in an `EmptyDir` volume, which means that after a restart,
@@ -143,9 +143,9 @@ patches:
       name: source-controller
 ```
 
-### Node affinity and tolerations
+## Node affinity and tolerations
 
-Pin the Flux controllers to specific nodes:
+Pin the Flux controller pods to specific nodes and allow the cluster autoscaler to evict them:
 
 ```yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
@@ -161,6 +161,9 @@ patches:
         name: all
       spec:
         template:
+          metadata:
+            annotations:
+              cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
           spec:
             affinity:
               nodeAffinity:
