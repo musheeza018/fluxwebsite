@@ -1,15 +1,9 @@
 ---
-title: Configure Helm drift detection
-linkTitle: Configure Helm drift detection
-description: "How to configure Helm drift detection in Flux"
-weight: 100
+title: Flux drift detection for Helm Releases
+linkTitle: Helm drift detection
+description: "How to enable Helm drift detection in Flux"
+weight: 20
 ---
-
-Helm drift detection identifies and alerts about any inconsistencies 
-or differences between the desired state of your Helm releases in your 
-Git repository and the actual state of deployed releases in the Kubernetes cluster.
-
-### Add feature flag to Helm controller
 
 At present, Helm releases are not by default checked for drift compared to
 cluster-state. To enable experimental drift detection, you must add the
@@ -18,9 +12,9 @@ cluster-state. To enable experimental drift detection, you must add the
 Enabling it will cause the controller to check for drift on all Helm releases
 using a dry-run Server Side Apply, triggering an upgrade if a change is detected.
 For detailed information about this feature, [refer to the
-documentation](/flux/components/helm/).
+documentation](/flux/components/helm/helmreleases/#drift-detection).
 
-To enable Helm drift detection [during bootstrap](_index.md) add the following patches to the flux-system `kustomization.yaml`:
+To enable drift detection [during bootstrap](boostrap-customization.md) add the following patches to the flux-system `kustomization.yaml`:
 
 ```yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
@@ -30,10 +24,10 @@ resources:
   - gotk-sync.yaml
 patches:
   - patch: |
-      # Enable drift detection feature
+      # Enable drift detection and correction
       - op: add
         path: /spec/template/spec/containers/0/args/-
-        value: --feature-gates=DetectDrift=true
+        value: --feature-gates=DetectDrift=true,CorrectDrift=true
       # Enable debug logging for diff output (optional)
       - op: replace
         path: /spec/template/spec/containers/0/args/2
@@ -43,4 +37,7 @@ patches:
       name: helm-controller
 ```
 
-
+{{% alert color="info" title="Disable drift correction" %}}
+To help aid transition to this new feature, it is possible to enable drift detection without it correcting drift.
+This can be done by setting the `CorrectDrift=false` feature flag in the above patch.
+{{% /alert %}}
