@@ -1,14 +1,12 @@
 ---
-title: Configure SSH Deploy Key Rotation
-linkTitle: Configure SSH Deploy Key Rotation
-description: "How to configure SSH Deploy Key Rotation in Flux"
-weight: 30
+title: "Flux deploy key rotation"
+linkTitle: "Deploy key rotation"
+description: "How to rotate the deploy key generated at bootstrap"
+weight: 19
 ---
 
-## Deploy key rotation
-
 There are several reasons you may want to rotate the deploy key:
-   
+
 - The token used to generate the key has expired.
 - The key has been compromised.
 - You want to change the scope of the key, e.g. to allow write access using the `--read-write-key` flag to `flux bootstrap`.
@@ -16,15 +14,11 @@ There are several reasons you may want to rotate the deploy key:
 While you can run `flux bootstrap` repeatedly, be aware that the `flux-system` Kubernetes Secret is never overwritten.
 You need to manually rotate the key as described here.
 
-To enable SSH deploy key rotation [during bootstrap](_index.md) add the following patches to the flux-system `kustomization.yaml`:
-
 To rotate the SSH key generated at bootstrap, first delete the secret from the cluster with:
 
 ```sh
 kubectl -n flux-system delete secret flux-system
 ```
-
-### Generate a new SSH key
 
 Then you have two alternatives to generate a new key:
 
@@ -39,4 +33,3 @@ Then you have two alternatives to generate a new key:
 2. Run `flux bootstrap ...` again. This will generate a new key pair and,
    depending on which Git provider you use, print the SSH public key that you then
    set as deploy key or automatically set the deploy key (e.g. with GitHub).
-
