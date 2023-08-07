@@ -1,8 +1,8 @@
 ---
 title: "Flux multi-tenancy"
 linkTitle: "Multi-tenancy lockdown"
-description: "How to configure Flux multi-tenancy lockdown."
-weight: 40
+description: "How to configure Flux multi-tenancy lockdown"
+weight: 12
 ---
 
 Flux allows different organizations and/or teams to share the same Kubernetes control plane; this is
@@ -69,7 +69,7 @@ Example of operations performed by tenants:
 
 ## How to configure Flux multi-tenancy
 
-A platform admin can lock down Flux on multi-tenant clusters [during bootstrap](_index.md) with the following patches:
+A platform admin can lock down Flux on multi-tenant clusters [during bootstrap](boostrap-customization.md) with the following patches:
 
 ```yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
@@ -128,3 +128,32 @@ at [github.com/fluxcd/flux2-multi-tenancy](https://github.com/fluxcd/flux2-multi
 to showcase how platform admins can onboard tenants
 and limit their access to the cluster resources with various policies.
 {{% /alert %}}
+
+### Flux cluster role aggregations
+
+By default, Flux [RBAC](/flux/security/#controller-permissions) grants Kubernetes builtin
+`view`, `edit` and `admin` roles access to Flux custom resources.
+
+This allows tenants to manage Flux resources in their own namespaces using a Service Account
+with a role binding to `admin`.
+
+If you wish to disable the RBAC aggregation, you can remove the `flux-view` and `flux-edit`
+cluster roles with:
+
+```yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - gotk-components.yaml
+  - gotk-sync.yaml
+patches:
+  - patch: |
+      apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRole
+      metadata:
+        name: flux
+      $patch: delete
+    target:
+      kind: ClusterRole
+      name: "(flux-view|flux-edit)-flux-system"
+```
