@@ -46,7 +46,18 @@
 
 /flux/use-cases/gcp-source-repository                                 /flux/installation/bootstrap/gcp-source-repository              301! 
 
-/flux/cheatsheets/bootstrap/#iam-roles-for-service-accounts                   /flux/installation/configuration/iam-roles-for-service-accounts/:splat               301!
+/flux/cheatsheets/sharding/#configure-controller-sharding                     /flux/installation/configuration/sharding            301
+/flux/cheatsheets/bootstrap/#increase-the-number-of-workers                   /flux/installation/configuration-vertical-scaling    301
+/flux/cheatsheets/bootstrap/#enable-helm-drift-detection                      /flux/installation/configuration/helm-drift-detection
+/flux/cheatsheets/bootstrap/#enable-helm-near-oom-detection                   /flux/installation/configuration/helm-oom-detection
+/flux/cheatsheets/bootstrap/#allow-helm-dns-lookups                           /flux/installation/configuration/helm-dns-lookups
+/flux/cheatsheets/bootstrap/#using-https-proxy-for-egress-traffic             /flux/installation/configuration/proxy-egress-traffic
+/flux/cheatsheets/bootstrap/#git-repository-access-via-socks5-ssh-proxy       /flux/installation/configuration/proxy-setting
+/flux/installation/#multi-tenancy-lockdown                                    /flux/installation/configuration/multitenancy
+/flux/installation/#air-gapped-environments                                   /flux/installation/configuration/air-gapped
+/flux/installation/#deploy-key-rotation                                       /flux/installation/configuration/deploy-key-rotation
+/flux/cheatsheets/bootstrap/#openshift-compatibility                          /flux/installation/configuration/openshift
+/flux/cheatsheets/bootstrap/#iam-roles-for-service-accounts                   /flux/installation/configuration/workload-identity   301               301!
 
 /docs/contributing/*                            /contributing/:splat                                301!
 /docs/*                                         /flux/:splat                                        301!
