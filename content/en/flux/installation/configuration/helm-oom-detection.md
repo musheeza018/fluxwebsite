@@ -1,14 +1,9 @@
 ---
-title: Configure Helm near OOM detection
-linkTitle: Configure Helm near OOM detection
-description: "How to enable Helm near OOM detection in Flux"
-weight: 111
-card:
-  name: configuration
-  weight: 10
+title: Flux near OOM detection for Helm
+linkTitle: Helm OOM detection
+description: "How to enable Helm near OOM detection"
+weight: 21
 ---
-
-### OOM detection for Helm controller
 
 When memory usage of the helm-controller exceeds the configured limit, the
 controller will forcefully be killed by Kubernetes' OOM killer. This may result
@@ -25,7 +20,7 @@ When gracefully shutting down, running Helm actions may mark the release as
 `failed`. Because of this, enabling this feature is best combined with
 thoughtful [remediation strategies](/flux/components/helm/helmreleases/#configuring-failure-remediation).
 
-To enable Helm OOM detection [during bootstrap](_index.md) add the following patches to the flux-system `kustomization.yaml`:
+To enable near OOM detection [during bootstrap](boostrap-customization.md) add the following patches to the flux-system `kustomization.yaml`:
 
 ```yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
@@ -51,5 +46,3 @@ patches:
       kind: Deployment
       name: helm-controller
 ```
-
-
