@@ -86,7 +86,7 @@ See `az configure --help`, `az configure --list-defaults`, and `az configure --d
 
 ## Flux Installation for Azure DevOps
 
-You can install Flux using a Azure Devops repository using the [`flux bootstrap git`](../../installation#bootstrap)
+You can install Flux using a Azure Devops repository using the [`flux bootstrap git`](../../installation/bootstrap/azure)
 command.
 Ensure you can login to [dev.azure.com](https://dev.azure.com) for your proper organization,
 and create a new repository to hold your Flux install and other Kubernetes resources.
