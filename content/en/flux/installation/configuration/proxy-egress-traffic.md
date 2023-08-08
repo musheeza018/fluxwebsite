@@ -15,7 +15,7 @@ If your cluster must use an HTTP proxy to reach GitHub or other external service
 you must set `NO_PROXY=.cluster.local.,.cluster.local,.svc`
 to allow the Flux controllers to talk to each other.
 
-To enable HTTP/S proxy for egress traffic [during bootstrap](_index.md) add the following patches to the flux-system `kustomization.yaml`:
+To enable HTTP/S proxy for egress traffic [during bootstrap](/flux/installation/configuration/bootstrap-customization) add the following patches to the flux-system `kustomization.yaml`:
 
 ```yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
