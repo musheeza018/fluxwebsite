@@ -7,7 +7,7 @@ weight: 190
 
 ### Test release candidates configuration in Flux
 
-To enable test release candidates [during bootstrap](_index.md) add the following patches to the flux-system `kustomization.yaml`:
+To enable test release candidates [during bootstrap](/flux/installation/configuration/bootstrap-customization) add the following patches to the flux-system `kustomization.yaml`:
 
 To test release candidates, you can patch the container image tags:
 
