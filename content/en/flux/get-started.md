@@ -30,7 +30,7 @@ To install the CLI with Homebrew run:
 brew install fluxcd/tap/flux
 ```
 
-For other installation methods, see the [CLI install documentation](installation.md#install-the-flux-cli).
+For other installation methods, see the [CLI install documentation](/flux/installation#install-the-flux-cli).
 
 ## Export your credentials
 
