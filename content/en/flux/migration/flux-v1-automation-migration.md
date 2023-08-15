@@ -143,7 +143,7 @@ guide][flux-v1-migration].
 
 When starting from scratch, you are likely to have used `flux bootstrap`. Rerun the command, and
 include the image automation controllers in your starting configuration with the flag
-`--components-extra`, [as shown in the installation guide][flux-bootstrap].
+`--components-extra`, [as shown in the installation guide](/flux/installation/#bootstrap-with-flux-cli).
 
 This will commit changes to your Git repository and sync them in the cluster.
 
