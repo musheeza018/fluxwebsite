@@ -40,7 +40,7 @@ features and improvements:
 
 - Verify OCI artifacts signed by Cosign (including `keyless` - currently
   still experimental and only supporting GCP and GHCR) with
-  [OCIRepository.spec.verify](/docs/components/source/ocirepositories/#verification).
+  [OCIRepository.spec.verify](/docs/components/source/ocirepositories/#insecure).
   Note this supports contextual login, but not insecure registries.
 - Allow pulling Helm charts dependencies from HTTPS repositories with
   mixed self-signed TLS and public CAs.
