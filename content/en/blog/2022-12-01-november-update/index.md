@@ -79,7 +79,7 @@ Check out these new pieces of documentation:
 
 - Guide: [AWS CodeCommit bootstrap](/flux/installation/bootstrap/aws-codecommit/)
 - Guide: [Azure DevOps
-  bootstrap](/flux/instalation/bootstrap/azure/#flux-installation-for-azure-devops)
+  bootstrap](/flux/installation/bootstrap/azure/#flux-installation-for-azure-devops)
 
 💖 Big thanks to all the Flux contributors that helped us with this
 release!
