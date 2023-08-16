@@ -35,7 +35,7 @@ In addition, RC.1 comes with support for auth with Azure Workload
 Identity when pulling OCI artifacts from ACR and when decrypting secret
 with Azure Vault. Also, Bootstrap for GitLab was extended with support
 for generating [GitLab Deploy
-Tokens](/flux/installation/#gitlab-and-gitlab-enterprise).
+Tokens](/flux/installation/bootstrap/gitlab-and-gitlab-enterprise/).
 
 Big thanks to all the Flux contributors that helped us with this release!
 
