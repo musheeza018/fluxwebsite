@@ -74,7 +74,7 @@ And finally **0.24** comes with security updates for Alpine CVEs. We are
 also happy to bring you
 
 - New bootstrap command for [Bitbucket Server and Data
-  Center](/flux/installation/#bitbucket-server-and-data-center)
+  Center](/flux/installation/bootstrap/bitbucket-server-and-data-center)
   repositories (CLI).
 - Add support for self-signed certificates when bootstrapping Flux
   with on-prem GitHub, GitLab and BitBucket servers (CLI).
