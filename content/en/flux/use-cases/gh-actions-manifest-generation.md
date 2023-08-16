@@ -809,7 +809,7 @@ It cannot be over-emphasized; if users want secrets to remain secret, the `flux-
 
 #### More Advanced Secrets Usage
 
-The use of KMS as opposed to in-cluster GPG keys with SOPS is left as an exercise for the reader. The basics of KMS with various cloud providers is covered in more depth by the [Mozilla SOPS][using various cloud providers] guide.
+The use of KMS as opposed to in-cluster GPG keys with SOPS is left as an exercise for the reader. The basics of KMS with various cloud providers is covered in more depth by the [Mozilla SOPS][/flux/guides/mozilla-sops/#using-various-cloud-providers/] guide.
 
 Another scenario we considered, but rejected for these examples, requires to decrypt and then re-encrypt SOPS secrets, for use with the `secretGenerator` feature of Kustomize. This workflow is not supported here for reasons already explained.
 
