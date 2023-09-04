@@ -22,6 +22,14 @@ toolkit controllers installed on it.
 Please see the [get started guide](../get-started/index.md)
 or the [installation guide](../installation/).
 
+## Helm chart
+
+Helm charts are essentially a fusion of Kubernetes YAML manifest templates and specialized Helm files, often referred to as a Helm package. The beauty of this lies in the fact that Kubernetes YAML manifests can be customized using templates, eliminating the need to manage multiple Helm charts for various environments. Helm harnesses the power of the Go templating engine to enable this functionality.
+
+With just a single Helm chart in hand, you have the ability to tweak deployment parameters for each environment by simply editing a single values file. Helm handles the task of applying these values to the templates. We will delve deeper into this practical aspect in the upcoming sections.
+
+In essence, Helm Charts simplify the intricacy and redundancy of Kubernetes manifests across different environments (such as development, user acceptance testing, staging, and production), all through a single template.
+
 ## Define a chart source
 
 To be able to release a Helm chart, the source that contains the chart
