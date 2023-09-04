@@ -271,7 +271,20 @@ for more details.
 ## Refer to values in `ConfigMap` and `Secret` resources
 
 It is possible to define a list of `ConfigMap` and `Secret` resources
-from which to take values. The values are merged in the order given,
+from which to take values.
+
+### Create a Secret
+
+In order to utilize your secret manager, External Secrets requires specific credentials, which are securely stored within a Secret, designed to be deployed automatically.
+
+```yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: external-secrets
+```
+
+The values in  `ConfigMap` and `Secret` are merged in the order given,
 with the later values overwriting earlier. These values always have a
 lower priority than the values inlined in the `HelmRelease` via the
 `spec.values` parameter.
